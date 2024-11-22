@@ -1,0 +1,356 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "RESTful API Bar à cocktails",
+        "description": "API pour manipuler des commandes et donner la possibilité à un client de suivre le statut de sa commande.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api/",
+            "description": "RESTful API Server"
+        }
+    ],
+    "paths": {
+        "/admin/orders": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get all orders",
+                "description": "Returns all orders.",
+                "operationId": "671ad5845297bcbe5b9f08d22ef096ea",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Create an order",
+                "description": "Creates an new order.",
+                "operationId": "a485b8ceeab664b175e1a94393e81734",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "table": {
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "default": "pending",
+                                        "enum": [
+                                            "pending",
+                                            "selecting_ingredients",
+                                            "shaking",
+                                            "adding_ice_cubes",
+                                            "ready"
+                                        ]
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "table": "T3",
+                                    "status": "pending"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/orders/{order_id}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get this order",
+                "description": "Returns this order.",
+                "operationId": "230c4f6245f18063a2a1d309174e4bf8",
+                "parameters": [
+                    {
+                        "name": "order_id",
+                        "in": "path",
+                        "description": "Order ID [ULID]",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "ULID"
+                        },
+                        "examples": {
+                            "ULID": {
+                                "summary": "Random ULID",
+                                "value": "01JD88EFN4N493AM4V00Z96TBR"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Delete this order",
+                "description": "Delete this order.",
+                "operationId": "24a33921d02c434f871fc44d871b5235",
+                "parameters": [
+                    {
+                        "name": "order_id",
+                        "in": "path",
+                        "description": "Order ID [ULID]",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "ULID"
+                        },
+                        "examples": {
+                            "ULID": {
+                                "summary": "Random ULID",
+                                "value": "01JD88EFN4N493AM4V00Z96TBR"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Update this order",
+                "description": "Update status (or table) of this order.",
+                "operationId": "1303736243aeea1c5824ca7182d4ac90",
+                "parameters": [
+                    {
+                        "name": "order_id",
+                        "in": "path",
+                        "description": "Order ID [ULID]",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "ULID"
+                        },
+                        "examples": {
+                            "ULID": {
+                                "summary": "Random ULID",
+                                "value": "01JD88EFN4N493AM4V00Z96TBR"
+                            }
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "table": {
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "default": "pending",
+                                        "enum": [
+                                            "pending",
+                                            "selecting_ingredients",
+                                            "shaking",
+                                            "adding_ice_cubes",
+                                            "ready"
+                                        ]
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "table": "T3",
+                                    "status": "pending"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/orders": {
+            "get": {
+                "tags": [
+                    "Order status tracking"
+                ],
+                "summary": "Orders by table code.",
+                "description": "Returns all orders of this table.",
+                "operationId": "76efaf60e0ae881bdf6842a544c08978",
+                "parameters": [
+                    {
+                        "name": "table",
+                        "in": "query",
+                        "description": "Table code in query.",
+                        "required": true,
+                        "examples": {
+                            "T1": {
+                                "summary": "Table code: T1",
+                                "value": "T1"
+                            },
+                            "T3": {
+                                "summary": "Table code: T3",
+                                "value": "T3"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Create an order",
+                "description": "Allows creating a user account.",
+                "operationId": "b4a0e526af6264d477fc6b45ac173e86",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "John Doe",
+                                    "email": "johndoe@email.fr",
+                                    "password": "kanta"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login",
+                "description": "Allows you to authenticate.",
+                "operationId": "0a012a85a383e323f9ba638b16bc720d",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "johndoe@email.fr",
+                                    "password": "kanta"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearer",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Order status tracking",
+            "description": "Allows you to track statuses of orders. [public]."
+        },
+        {
+            "name": "Orders",
+            "description": "Allows you to manage orders [admin]."
+        },
+        {
+            "name": "Authentication",
+            "description": "Allows you to register and login. [public]."
+        }
+    ]
+}
