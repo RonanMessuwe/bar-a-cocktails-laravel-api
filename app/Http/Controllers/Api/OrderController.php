@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\OrderEvent;
 use App\Events\OrderStatusUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Orders\OrdersByTableRequest;
@@ -19,9 +18,6 @@ use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
  *  description="API pour manipuler des commandes et donner la possibilité à un client de suivre le statut de sa commande."
  * )
  *
- *
- *
- *
  */
 class OrderController extends Controller
 {
@@ -29,7 +25,7 @@ class OrderController extends Controller
      * Display a listing of orders.
      *
      *  @OA\Server(
-     *      url="http://localhost:8000/api/",
+     *      url="https://serveur.ronanmessuwe.info:31415/api/",
      *      description="RESTful API Server"
      * )
      *
@@ -170,6 +166,7 @@ class OrderController extends Controller
      */
     public function update(Order $order, UpdateOrderRequest $request)
     {
+        /** Is status updated? */
         $orderStatusUpdated = $request->has('status') && $request->get('status') != $order->status;
 
         $inputs = $request->only(['status', 'table']);
